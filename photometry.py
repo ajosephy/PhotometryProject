@@ -50,6 +50,15 @@ def airy_disk(x=0, y=0, ang_size=1., N=2**18):
 def gaussian2D(x=0, y=0, cov=[[1,0],[0,1]], N=2**18):
     """
     2D Gaussian profile.
+    Inputs:
+        x   - x-coord of origin in arcsec
+        y   - y-coord of origin in arcsec
+        cov - covariance matrix used to define profile shape
+        N   - number of photons to generate
+    Outputs:
+        photons  - an array of photons with shape=(3,N)
+            the first 2 dimensions are spatial locations,
+            the last contains the photon's detection prob.
     """
     photons = np.empty((3,N))
     photons[[X,Y]] = np.random.multivariate_normal([x,y],cov,N).T
@@ -58,6 +67,18 @@ def gaussian2D(x=0, y=0, cov=[[1,0],[0,1]], N=2**18):
 
 
 def sky_background(pixel_size, ccd_dim, N):
+    """
+    Uniform random noise.
+    Inputs:
+        pixel_size - angular size of pixels in arcsec
+        ccd_dim    - Scalar if detector is square, tuple/list otherwise
+                     (ex. ccd_dim == 16 gives a 16x16 CCD)
+        N          - number of photons to generate
+    Outputs:
+        photons  - an array of photons with shape=(3,N)
+            the first 2 dimensions are spatial locations,
+            the last contains the photon's detection prob.
+    """
     photons = np.ones((3,N),np.float32)
     if np.isscalar(ccd_dim):
         photons[[X,Y]] = np.random.uniform(-ccd_dim/2,ccd_dim/2,(2,N))*pixel_size
@@ -68,6 +89,16 @@ def sky_background(pixel_size, ccd_dim, N):
 
 
 def cosmic_ray(x0, x1, y0, y1, N):
+    """
+    Streak caused by cosmic rays.
+    Inputs:
+        x0, x1, y0, y1 - starting/ending coords in arcsec
+        N              - number of photons to generate
+    Outputs:
+        photons  - an array of photons with shape=(3,N)
+            the first 2 dimensions are spatial locations,
+            the last contains the photon's detection prob.
+    """
     photons = np.ones((3,N),np.float32)
     photons[[X,Y]] = np.linspace(x0,x1,N), np.linspace(y0,y1,N)
     return photons
