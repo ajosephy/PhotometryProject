@@ -145,9 +145,9 @@ def apply_intra_pixel(photons, pixel_size=0.073, scale=0.7):
     """ 
     Gaussian sensitivity variations that peak in pixel centers
     Inputs:
-        telescope - Telescope object to remap photons to pixel coords
-        photons   - Array of photons with shape=(3,N_photons)
-        scale     - Scale for 2D Gaussian w.r.t. pixel size
+        photons    - Array of photons with shape=(3,N_photons)
+        pixel_size - Angular size of pixels in arcsec
+        scale      - Scale for 2D Gaussian w.r.t. pixel coords
     Outputs:
         None, photons[P] (probabilities of detection) is modified in place
     """ 
